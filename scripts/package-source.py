@@ -12,12 +12,12 @@ skip_directories = {
     "dist", "coverage", ".git", ".build", ".swiftpm", "evidence", "validation",
 }
 secret_suffixes = {".pem", ".key", ".p12", ".pfx", ".mobileprovision"}
-files = [root / name for name in ("Package.swift", "Package.resolved", "README.md", "LICENSE", ".gitignore")]
+files = [root / name for name in ("Package.swift", "Package.resolved", "README.md", "LICENSE")]
 for directory in ("Sources", "Tests", "Resources", "scripts", "docs", ".github", "Networking", "Signaling"):
     for path in (root / directory).rglob("*"):
         rel = path.relative_to(root)
         if (not path.is_file() or path.is_symlink() or skip_directories.intersection(rel.parts)
-                or path.name == ".DS_Store" or path.name.startswith(("._", ".dev.vars", ".env", ".deploy"))
+                or path.name in {".DS_Store", ".gitignore"} or path.name.startswith(("._", ".dev.vars", ".env", ".deploy"))
                 or path.suffix.lower() in secret_suffixes | {".pyc", ".log"}):
             continue
         files.append(path)
