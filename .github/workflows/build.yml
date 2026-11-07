@@ -31,7 +31,7 @@ jobs:
       - run: npm test
       - run: npm run dry-run
   build:
-    runs-on: macos-14
+    runs-on: macos-15
     timeout-minutes: 25
     steps:
       - name: Check out source
