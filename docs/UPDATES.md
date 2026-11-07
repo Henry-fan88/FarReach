@@ -4,7 +4,9 @@ FarReach 0.6 uses [Sparkle 2](https://sparkle-project.org/documentation/) for si
 
 ## Current repository state
 
-The updater is implemented, but `Resources/UpdateConfiguration.json` has an empty feed URL and public key. This intentionally disables update requests in the current development build. No release repository, signing key, or hosted appcast has been created.
+`Resources/UpdateConfiguration.json` contains the official GitHub release-feed URL and the public Ed25519 update-verification key. The private signing key stays in the maintainer’s login Keychain under the `FarReach-updates` account and is not part of this repository. The public feed is served from the latest published GitHub release.
+
+Fork maintainers should replace both the feed URL and public key with their own before distributing builds. Clearing both fields disables update requests; partial or invalid configuration is rejected.
 
 Version 0.5.1 and earlier do not contain an updater. Install the first configured 0.6-or-later release manually once on each Mac. An unconfigured development build also needs a manually installed configured release before it can discover updates.
 
@@ -16,7 +18,7 @@ Version 0.5.1 and earlier do not contain an updater. Install the first configure
 - Restarting the app preserves Keychain pairing and user preferences. It does not automatically re-enable sharing.
 - Sparkle verifies signed feeds and update archives; archive verification is required before extraction. System profiling is disabled. The release host still sees ordinary HTTP request metadata, such as IP address and user-agent.
 
-## One-time maintainer setup
+## One-time setup for a fork or new signing identity
 
 1. Create a public GitHub repository for the project. No repository credentials belong in the app.
 2. Resolve the pinned dependency and generate a dedicated signing key in your login Keychain:
@@ -65,6 +67,8 @@ The update feed and the Cloudflare desktop-signaling service are independent. Co
 
 ## Validation before enabling distribution
 
-Automated checks cover configuration rejection, deferred restarts, packaging symlinks/permissions, and signed artifact generation/tamper rejection. Complete an actual old-to-new installation test using a dedicated test app before the first public release. Verify the installed app remains in place, signing/notarization passes, settings and pairing persist, active remote access is not interrupted, and only the intended version is offered.
+Automated checks cover configuration rejection, deferred restarts, packaging symlinks/permissions, and signed artifact generation/tamper rejection. A local smoke test also downloaded and verified a signed update, replaced an isolated closed FarReach bundle from build 10 to 11 at the same path, and preserved a test preference. It used a temporary signing key and separate bundle identifier; it did not exercise production Keychain pairing or a remote session.
+
+For each release, verify the actual published feed/archive, signing/notarization status, persistent pairing, and active-session behavior. A first release can only report “up to date”; a later published build is needed to test a real public old-to-new update.
 
 Reference: [Sparkle setup](https://sparkle-project.org/documentation/), [publishing](https://sparkle-project.org/documentation/publishing/), and [update settings](https://sparkle-project.org/documentation/customization/).

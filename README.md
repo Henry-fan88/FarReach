@@ -20,12 +20,12 @@ Audio, clipboard sync, file transfer, multi-display selection, FileVault/pre-log
 
 ## Install
 
-1. Extract `FarReach-macOS.zip`, or [build from source](#build-from-source).
+1. Download the macOS ZIP from [GitHub Releases](https://github.com/Henry-fan88/FarReach/releases/latest) and extract it, or [build from source](#build-from-source).
 2. Copy `FarReach.app` to `/Applications` on both Macs. Use the same release on both ends.
 3. Open FarReach and visit **Setup**. The sharing Mac needs **Screen Recording** permission; remote input also needs **Accessibility** permission.
 4. For system-shortcut forwarding, grant **Accessibility** to FarReach on the viewing Mac too.
 
-The included development build is ad-hoc signed and is not Apple-notarized. macOS may require **System Settings → Privacy & Security → Open Anyway** after transfer. Quit the app before replacing it. A new development signature can require reviewing FarReach’s existing privacy permissions or Keychain access.
+The official GitHub release is Developer ID–signed and notarized by Apple. Locally built development packages use ad-hoc signing unless a signing identity is configured. Quit the app before replacing it. A changed signing identity can require reviewing FarReach’s privacy permissions or Keychain access.
 
 ## Pair two Macs
 
@@ -59,7 +59,7 @@ Both Macs must remain running and online. Sharing is an explicit choice: restart
 
 Configured releases check for signed updates and can download and install them automatically. Use **FarReach → Check for Updates…** or **Setup → App updates** to check manually and change preferences. Installation waits until sharing and remote connections have stopped, then replaces the existing app and restarts it. Pairing and settings are retained; sharing must be enabled again after restart.
 
-This source snapshot has no update feed or signing key configured yet. Its update controls remain inactive until a configured release is installed. Version 0.5.1 and earlier need one manual upgrade to that first release. See [updater setup and release publishing](docs/UPDATES.md).
+Official releases use the signed [GitHub update feed](https://github.com/Henry-fan88/FarReach/releases/latest/download/appcast.xml). Version 0.5.1 and earlier, and earlier unconfigured development builds, need one manual upgrade to the first configured release. On the latest release, a manual check reports that the app is up to date; later releases can update in place. See [updater setup and release publishing](docs/UPDATES.md).
 
 ## Session controls
 

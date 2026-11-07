@@ -52,7 +52,7 @@ A managed network may block the needed UDP traffic or use NAT behavior incompati
 
 The native app launches `Contents/Helpers/FarReachNetwork`, built from the original Go sources in [Networking](../Networking), with Pion WebRTC and other open-source dependencies. It runs as the same user and is part of the app's trusted code. It is not a privileged system daemon or a separately installed VPN. Configuration and frames travel over bounded binary standard-input/output pipes. The wrapper launches the helper without command-line arguments, supplies a minimal environment, and discards helper stderr rather than exposing secrets in logs. A closed or stalled helper can be terminated by the owning app transport.
 
-Replacing the helper or the app's source can change the security properties. The development app is ad-hoc signed and is not Apple-notarized; source availability and checksums are not an independent security audit. Dependency licenses are retained with the distribution.
+Replacing the helper or the app's source can change the security properties. Local builds default to ad-hoc signing; published release notes identify Developer ID signing and notarization status. Source availability, code signing, notarization, and checksums are not an independent security audit. Dependency licenses are retained with the distribution.
 
 ## Local network mode
 
