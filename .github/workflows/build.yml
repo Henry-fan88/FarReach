@@ -1,0 +1,64 @@
+name: Build macOS app
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: macos-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  signaling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: Signaling
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: Signaling/package-lock.json
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - run: npm run dry-run
+  build:
+    runs-on: macos-14
+    timeout-minutes: 25
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.3'
+          cache-dependency-path: Networking/go.sum
+      - name: Show toolchains
+        run: |
+          swift --version
+          go version
+      - name: Test internet transport
+        working-directory: Networking
+        run: go test -race ./...
+      - name: Exercise impaired direct connections
+        run: ./scripts/test-network-performance.sh
+      - name: Build application and bundled helper
+        run: ./scripts/build-app.sh
+      - name: Run Swift tests
+        run: swift test --disable-sandbox
+      - name: Check release configuration and archive boundaries
+        run: python3 -m unittest discover -s Tests/PackagingTests -v
+      - name: Upload development build
+        uses: actions/upload-artifact@v4
+        with:
+          name: FarReach-macos-development
+          path: dist/FarReach-macOS.zip
+          if-no-files-found: error
